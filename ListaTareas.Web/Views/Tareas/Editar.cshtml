@@ -1,0 +1,17 @@
+﻿@model ListaTareas.Entidades.Tarea
+@{
+    ViewData["Title"] = "Editar Tarea";
+}
+
+<h1>Editar Tarea</h1>
+
+<form asp-controller="Tareas" asp-action="Editar" method="post">
+    <input type="hidden" asp-for="IdTarea" />
+
+    <div>
+        <label for="Descripcion">Descripción</label>
+        <input asp-for="Descripcion" class="form-control"/>
+    </div>
+
+    <button type="submit" class="btn-primary">Guardar</button>
+</form>

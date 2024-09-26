@@ -1,0 +1,82 @@
+﻿@model List<ListaTareas.Entidades.Tarea>
+@{
+}
+
+ <style>
+    .completada {
+        text-decoration: line-through;
+        background-color: #e0e0e0;
+        color: #808080;
+    }
+
+ </style>
+<h1>Lista de Tareas</h1>
+
+<!-- lista de tareas con un for each, id, descripcion y si esta completada o no-->
+
+<a class="accordion-button" asp-controller="Tareas" asp-action="Agregar">Agregar Tarea</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Descripcion
+            </th>
+            <th>
+                Estado
+            </th>
+            <th>Opciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr data-id="@item.IdTarea" class="tarea-row @(item.Completada ? "completada" : "")" onclick="toggleCompletada(this)">
+                <td>@Html.DisplayFor(modelItem => item.IdTarea)</td>
+                <td>@Html.DisplayFor(modelItem => item.Descripcion)</td>
+                <td class="estado-text">@((item.Completada ? "Completada" : "No Completada"))</td>
+                <td>
+                    <a asp-controller="Tareas" asp-action="Editar" asp-route-idTarea="@item.IdTarea">Editar</a>
+                    <a asp-controller="Tareas" asp-action="Eliminar" asp-route-idTarea="@item.IdTarea">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+    <script>
+
+        function toggleCompletada(row) {
+            // Prevenir el clic en los enlaces de las acciones
+            if (event.target.tagName === 'A') {
+                return;
+            }
+
+            // Obtener el id de la tarea desde el atributo data-id
+            var idTarea = row.getAttribute("data-id");
+
+            // Llamar a la acción del controlador para actualizar el estado
+            fetch(`/Tareas/ToggleCompletada?idTarea=${idTarea}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Alternar la clase 'completada' en la fila
+                        row.classList.toggle("completada");
+
+                        // Actualizar el texto de estado en la celda
+                        const estadoText = row.querySelector(".estado-text");
+                        if (row.classList.contains("completada")) {
+                            estadoText.textContent = "Completada";
+                        } else {
+                            estadoText.textContent = "No Completada";
+                        }
+                    }
+                });
+        }
+    </script>

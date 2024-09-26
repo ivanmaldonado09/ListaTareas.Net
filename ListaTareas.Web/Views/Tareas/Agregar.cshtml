@@ -1,0 +1,17 @@
+﻿@model ListaTareas.Entidades.Tarea
+@{
+    ViewData["Title"] = "Agregar Tarea";
+}
+
+<h1>Agregar Tarea</h1>
+
+<form method="post">
+
+    <div class="form-group">
+        <label asp-for="Descripcion"></label>
+        <input asp-for="Descripcion" class="form-control" />
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Agregar</button>
+
+</form>
